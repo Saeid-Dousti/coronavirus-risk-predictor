@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+training/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -109,3 +109,13 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# data
+data/raw/news_data
+data/raw/cord_19
+
+# models
+app/word2vec_model/
+
+# tests
+training/sentiment_analysis_models.ipynb

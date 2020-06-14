@@ -1,0 +1,13 @@
+# API Stuff -------------------------------------------------
+#
+API_key_census: '22675759fc334d9c218ccd6b585baaaa0bc40194'
+API_key_weather: '0b174fb5449740019bc191210201206'
+yaml_key1: ''
+yaml_key2: ''
+
+
+# Training Hyperparams --------------------------------------
+
+batch_size: 128
+num_epochs: 200
+validation_every: 1
