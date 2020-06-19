@@ -1,37 +1,33 @@
 import os
-import csv
+from zipfile import ZipFile
+
 import pandas as pd
 import streamlit as st
 from PIL import Image
-from zipfile import ZipFile
 
-from app.classification_functions import feature_extraction, classification
+from app.inference_functions import feature_extraction, classification
 
 classifier_file = 'app/classifiers/classifier_random_for.sav'
 word2vec_file = 'app/word2vec/newsdata_model2'
 
 # extract word2vec dependency files if this has not occurred previously
 if not os.path.isfile(word2vec_file + '.wv.vectors.npy'):
-    with ZipFile('word2vec_file1.zip', 'r') as zipObj:
+    with ZipFile('app/word2vec/word2vec_file1.zip', 'r') as zipObj:
         # Extract all the contents of zip file in word2vec directory
         zipObj.extractall('app/word2vec')
 
 if not os.path.isfile(word2vec_file + '.trainables.syn1neg.npy'):
-    with ZipFile('word2vec_file2.zip', 'r') as zipObj:
+    with ZipFile('app/word2vec/word2vec_file2.zip', 'r') as zipObj:
         # Extract all the contents of zip file in word2vec directory
         zipObj.extractall('app/word2vec')
 
 
-# create dictionary with all the US counties
-with open('data/united-states-counties.csv') as csvfile:
-    county_list = csv.reader(csvfile)
-    statedict = dict()
-    for county in county_list:
-        statedict[county[0]] = county[1]
+# create US counties dataframe to allow people to choose counties
+df = pd.read_csv('data/united-states-counties.csv')
 
 
-# main function starting app
 def main():
+    """Calls run function only if main"""
     image = Image.open('static/coronavirus.png')
     st.image(image, width=100, format='PNG')
     with open("app/intro.md", 'r') as file:
@@ -39,27 +35,34 @@ def main():
     run()
 
 
-# run web app
 def run():
+    """Function runs web-app"""
     # ask for input on activity and county location
-    act_input = st.text_input("Please indicate the activity you would like to partake in")
-    count_input = st.text_input("Which county do you want to go to?")
+    act_input = st.text_input("Please indicate the activity you would like to partake in.")
+    states = sorted(df['State'].value_counts().index.tolist())
+    state = st.selectbox('Choose State', states)
+    count_input = None
+
+    if state:
+        counties = sorted(df[df['State'] == state]['County'].value_counts().index.tolist())
+        count_input = st.selectbox('Choose County', counties)
+
     if act_input and count_input:
-        if count_input not in statedict:
+        if st.button('Check Risk'):
 
-            # check if county exists in US county dictionary
-            st.markdown('Inputted county has not been found, please try with another county')
-
-        else:
-            # if exists - start feature extraction and classification
             count_input = count_input.replace(' County', '')
             features, feature_list, date, county_full = feature_extraction(act_input, count_input, word2vec_file)
-            display_features = pd.DataFrame(features[100:-1].reshape(1, -1), columns=feature_list)
 
-            # display results
-            st.table(display_features)
-            risk_level = classification(act_input, features, feature_list, date, county_full, classifier_file)
-            st.markdown('RISK LEVEL: ' + risk_level.upper())
+            if features is None:
+                st.markdown('No information about inputted activity, please try with another activity.')
+
+            else:
+                display_features = pd.DataFrame(features[100:-1].reshape(1, -1), columns=feature_list)
+
+                # display results
+                st.table(display_features)
+                risk_level = classification(act_input, features, feature_list, date, county_full, classifier_file)
+                st.markdown('OVERALL RISK LEVEL: ' + risk_level.upper())
 
 
 # only run if main

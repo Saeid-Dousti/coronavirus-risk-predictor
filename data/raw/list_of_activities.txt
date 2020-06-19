@@ -157,7 +157,6 @@ movie_rental
 movie_theater
 museum
 night_club
-painter
 park
 parking
 pet_store

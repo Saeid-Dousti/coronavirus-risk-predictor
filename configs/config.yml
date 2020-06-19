@@ -1,13 +1,24 @@
 # API Stuff -------------------------------------------------
 #
-API_key_census: '22675759fc334d9c218ccd6b585baaaa0bc40194'
-API_key_weather: '0b174fb5449740019bc191210201206'
+API_key_census: ''
+API_key_weather: ''
 yaml_key1: ''
 yaml_key2: ''
 
 
 # Training Hyperparams --------------------------------------
 
-batch_size: 128
-num_epochs: 200
-validation_every: 1
+n_estimators: [5,10,20,30,60,100,150] # of trees in the forest
+max_features: ['auto', 'sqrt','log2'] # number of features to consider when looking for the best split
+max_depth: [3,5,10]  # maximum depth of the trees
+min_samples_split: [0.1, 2, 5] # min number of samples required to split an internal node
+min_samples_leaf: [1, 2, 4] #min number of samples in a leaf node
+booster: ['gbtree', 'gblinear', 'dart']
+bootstrap: [True, False]
+subsample: [0.5, 1]
+C: [0.01, 0.1, 1, 10]
+layers: [(50, 50, 50), (50, 100, 50), (100,0)]
+activation: ['tanh', 'relu']
+solver: ['sgd', 'adam']
+alpha: [0.0001, 0.05]
+learning_rate: ['constant', 'adaptive']

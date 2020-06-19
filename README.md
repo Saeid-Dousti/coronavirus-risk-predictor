@@ -1,13 +1,22 @@
-# Corona Predict
+# Corona Predict 🧍↔️🧍
 #### Tool for Coronavirus Infection Risk Prediction of Activities
 
-Welcome to my project GitHub.
+[![GitHub issues](https://img.shields.io/github/issues/devanshkv/insight_docclean?style=flat-square)](https://github.com/marcelschaack/coronavirus-predictor/issues)
+[![GitHub forks](https://img.shields.io/github/forks/devanshkv/insight_docclean?style=flat-square)](https://github.com/marcelschaack/coronavirus-predictor/members)
+[![GitHub stars](https://img.shields.io/github/stars/devanshkv/insight_docclean?style=flat-square)](https://github.com/marcelschaack/coronavirus-predictor/stargazers)
+[![GitHub license](https://img.shields.io/github/license/devanshkv/insight_docclean?style=flat-square)](https://github.com/marcelschaack/coronavirus-predictor/blob/master/LICENSE)
+[![HitCount](http://hits.dwyl.com/marcelschaack/coronavirus-predictor.svg)](http://hits.dwyl.com/marcelschaack/coronavirus-predictor)
+
+Welcome to the Corona Predict Github.
 This tool helps you understand the risks of Coronavirus transmission of independent particular activities.
-Further instructions will be added shortly.
+
+Here is a demo of the application:
+
+![Failed to load](/static/application_demo.gif?raw=true "Demo")
 
 
 ## Setup
-Clone repository and update python path
+Clone repository
 ```
 git clone https://github.com/marcelschaack/coronavirus-risk-predictor.git
 cd ./coronavirus-risk-predictor
@@ -16,14 +25,16 @@ cd ./coronavirus-risk-predictor
 
 #### Dependencies
 
-- [Streamlit](https://streamlit.io)
+- Python 3.6 or higher
+- pip
+- conda
 - shown in [requirements.txt](https://github.com/marcelschaack/coronavirus-risk-predictor/blob/master/requirements.txt)
 
 
 #### Installation
 To install the package above, pleae run:
 ```shell
-pip install -r requiremnts
+pip install -r requirements
 ```
 
 ## Build Environment
@@ -41,12 +52,11 @@ pip install -r requiremnts
 
 ## Configs
 - As you will require AWS access keys to run the full interference, please contact me to obtain the keys
-- **DO NOT STORE CREDENTIALS IN THE CONFIG DIRECTORY!!**
 - If credentials are needed, use environment variables or HashiCorp's [Vault](https://www.vaultproject.io/)
 
 
 ## Test
-- Include instructions for how to run all tests after the software is installed
+- Tests will be added here briefly
 ```
 # Example
 
@@ -65,30 +75,24 @@ pip install -r requiremnts
 ```
 
 ## Build Model
-- Include instructions of how to build the model
-- This can be done either locally or on the cloud
+- The word2vec model and final classifier model (random forest) are already build and included as pickle files.
+- If you would like to train your own classifier or word2vec model, you can do so by running the following commands:
+
+```
+python training/train_classifier.py
+python training/train_word2vec.py
+```
 
 ![Failed to load](/static/data_training_pipeline.jpg?raw=true "Data Training Pipeline")
-```
-# Example
 
-# Step 1
-# Step 2
+## Running the app
+Run
 ```
-
-## Serve Model
-- Include instructions of how to set up a REST or RPC endpoint
-- This is for running remote inference via a custom model
-```
-# Example
-
-# Step 1
-# Step 2
+streamlit run corona_predict.py
 ```
 
 ## Analysis
-- Include some form of EDA (exploratory data analysis)
-- And/or include benchmarking of the model and results
+- Further results about the model, PCA and significance will be included shortly
 ```
 # Example
 
