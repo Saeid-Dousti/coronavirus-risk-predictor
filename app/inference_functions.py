@@ -10,10 +10,11 @@ from app.utils import APICaller
 
 # Main function
 def main(args):
-    clf_file = 'classifiers/optimized_random_for.sav'
-    embd_file = 'word2vec/newsdata_model2'
-    features, feature_list, date, county = feature_extraction(args['activity'], args['location'], clf_file)
-    risk_level = classification(args['activity'], features, feature_list, date, county, embd_file)
+    clf_file = 'app/classifiers/optimized_random_for.sav'
+    embd_file = 'app/word2vec/newsdata_model2'
+    county = args['county'].replace(' County', '')
+    features, feature_list, date, county = feature_extraction(args['activity'], county, embd_file)
+    risk_level = classification(args['activity'], features, feature_list, date, county, clf_file)
 
 
 def feature_extraction(activity, location, word2vec_file):
@@ -92,14 +93,19 @@ def classification(activity, features, feature_list, date, location, classifier_
 def init_argparse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         usage="%(prog)s [OPTION] [FILE]...",
-        description="Classify risk level"
+        description="Classify risk level",
     )
     parser.add_argument(
         "-a", "--activity", help="activity",
-        default='data/raw/sample.csv'
+        default='swimming',
+        required=True,
+        type=str
     )
     parser.add_argument(
-        "-c", "--county", help="county"
+        "-c", "--county", help="county",
+        default='San Francisco County',
+        required=True,
+        type=str
     )
     return parser
 

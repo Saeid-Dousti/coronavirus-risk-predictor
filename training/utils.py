@@ -24,7 +24,7 @@ def stripword(word):
 
 
 def read_yaml(model_type):
-    # read yaml files to get configurations
+    """read yaml files to get configurations"""
     with open('configs/config.yml', 'r') as f:
         y = yaml.load(f)
         n_estimators = y['n_estimators']

@@ -13,10 +13,17 @@ tokenizer = load('tokenizers/punkt/english.pickle')
 
 
 def main(args):
+    """Reads csv data file containing sentences, tokenizes and uses them to train word2vec model"""
     data = pd.read_csv(args['data_csv'], index_col=0)
+
+    # tokenize and preprocess sentences
     sentences = [stripword(row.translate(translator).lower).split(' ') for row in data['Sentence']]
+
+    # create bigrams to capture word combinations (e.g. New_York)
     bigram_transformer = phrases.Phrases(sentences)
     bigram = phrases.Phraser(bigram_transformer)
+
+    # train word2vec model according to the hyperparameters chosen
     currentmodel = Word2Vec(bigram[sentences], workers=-1, sg=0, size=args['model_size'], min_count=5,
                             window=['window_size'], sample=1e-3)
     currentmodel.init_sims(replace=True)

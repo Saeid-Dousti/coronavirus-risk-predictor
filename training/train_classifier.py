@@ -13,14 +13,17 @@ from xgboost import XGBClassifier
 
 
 def main(args):
+    """Trains classifier depending on the type chosen and optimizes for the metric chosen"""
     # load data
     data = pd.read_csv(args['data_csv'], index_col=0)
     y = data['scores']
     X = data.drop(['activities', 'counties', 'dates', 'scores'], axis=1)
 
+    # resample to counteract slight class imbalance
     X_resampled, y_resampled = SMOTE().fit_resample(X, y)
     X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=42)
 
+    # create type of classifier chosen
     if args['type'] == 'rf':
         clf = RandomForestClassifier()
     elif args['type'] == 'xgb':
@@ -30,6 +33,7 @@ def main(args):
     else:
         clf = MLPClassifier(early_stopping=True, max_iter=200)
 
+    # carry out hyperparameter optimization
     if args['optimization_metric']:
         random_grid = read_yaml(args['type'])
 
@@ -38,9 +42,11 @@ def main(args):
         opt_model.fit(X_train, y_train)
         clf = opt_model.best_estimator_
 
+    # train model
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
 
+    # print results of model validation
     cm = confusion_matrix(y_test, y_pred)
     report = classification_report(y_test, y_pred)
     print(cm)

@@ -2,8 +2,10 @@ import csv
 import gzip
 import json
 import os
+import urllib.request
 from datetime import timedelta, datetime
 from statistics import mean
+from time import localtime
 
 import boto3
 import requests
@@ -91,12 +93,12 @@ class APICaller:
             for row in csvdata:
                 if row[1] == self.code:
                     zipcode = row[0]
+                    break
 
-        url = 'https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q={}&date={}&tp=24&format=json&' \
-              'key={}'.format(zipcode, date, key2)
-
-        while True:
+        for _ in range(7):
             try:
+                url = 'https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q={}' \
+                      '&date={}&tp=24&format=json&key={}'.format(zipcode, date, key2)
                 response = requests.get(url).json()
 
                 temp = response['data']['weather'][0]['maxtempC']
@@ -105,10 +107,9 @@ class APICaller:
                 wind = response['data']['weather'][0]['hourly'][0]['windspeedKmph']
                 rain = response['data']['weather'][0]['hourly'][0]['precipMM']
                 break
+
             except KeyError:
-                date = str(date - timedelta(days=1))[:10]
-                url = 'https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q={}&date={}&' \
-                      'tp=24&format=json&key={}'.format(zipcode, date, key2)
+                date = date - timedelta(days=1)
 
         weather = (temp, temp2, sun, wind, rain)
         return weather
@@ -120,12 +121,17 @@ class APICaller:
 
         filename = date + '-social-distancing.csv.gz'
 
-        # download file from S3 bucket
+        # download social distancing information file from S3 bucket
         if not os.path.isfile('data/raw/' + filename):
-            s3 = boto3.resource('s3', aws_access_key_id=key3,
-                                aws_secret_access_key=key4)
-            filedir = 'social-distancing/v2/' + date[:4] + '/' + date[5:7] + '/' + date[8:] + '/'
-            s3.Bucket('sg-c19-response').download_file(filedir + filename, 'data/raw/' + filename)
+            session = boto3.Session(
+                aws_access_key_id=key3,
+                aws_secret_access_key=key4,  # use current access key from SafeGraph group
+                region_name='us-east-1'
+            )
+            s3 = session.client('s3', endpoint_url='https://s3.wasabisys.com')
+
+            filedir = 'social-distancing/v2/{}/{}/{}/'.format(date[:4], date[5:7], date[8:])
+            s3.download_file(Bucket='sg-c19-response', Key=filedir + filename, Filename='data/raw/' + filename)
 
         with gzip.open('data/raw/' + filename, mode="rt") as csvfile:
             dwell_times = list()
@@ -142,10 +148,16 @@ class APICaller:
         date = self.date_str
         date2 = str(self.date - timedelta(days=7))[:10]
         county = self.county + ' County, ' + self.state + ', United States'
-        with open('data/raw/timeseries-byLocation.json', 'r', encoding="utf8") as jfile:
+        case_file = 'data/raw/timeseries-byLocation.json'
+
+        if datetime.fromtimestamp(os.path.getmtime(case_file)) < self.date - timedelta(days=1):
+            url = 'https://coronadatascraper.com/timeseries-byLocation.json'
+            urllib.request.urlretrieve(url, case_file)
+
+        with open(case_file, 'r', encoding="utf8") as jfile:
             data = json.load(jfile)
 
-            for _ in range(7):
+            for _ in range(14):
                 try:
                     cases = data[county]['dates'][date]['cases'] - data[county]['dates'][date2]['cases']
                     if cases < 0:

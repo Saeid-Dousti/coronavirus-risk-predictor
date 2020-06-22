@@ -1,11 +1,11 @@
 # Corona Predict 🧍↔️🧍
 #### Tool for Coronavirus Infection Risk Prediction of Activities
 
-[![GitHub issues](https://img.shields.io/github/issues/devanshkv/insight_docclean?style=flat-square)](https://github.com/marcelschaack/coronavirus-predictor/issues)
-[![GitHub forks](https://img.shields.io/github/forks/devanshkv/insight_docclean?style=flat-square)](https://github.com/marcelschaack/coronavirus-predictor/members)
-[![GitHub stars](https://img.shields.io/github/stars/devanshkv/insight_docclean?style=flat-square)](https://github.com/marcelschaack/coronavirus-predictor/stargazers)
-[![GitHub license](https://img.shields.io/github/license/devanshkv/insight_docclean?style=flat-square)](https://github.com/marcelschaack/coronavirus-predictor/blob/master/LICENSE)
-[![HitCount](http://hits.dwyl.com/marcelschaack/coronavirus-predictor.svg)](http://hits.dwyl.com/marcelschaack/coronavirus-predictor)
+[![GitHub issues](https://img.shields.io/github/issues/marcelschaack/coronavirus-risk-predictor?style=flat-square)](https://github.com/marcelschaack/coronavirus-risk-predictor/issues)
+[![GitHub forks](https://img.shields.io/github/forks/marcelschaack/coronavirus-risk-predictor?style=flat-square)](https://github.com/marcelschaack/coronavirus-risk-predictor/members)
+[![GitHub stars](https://img.shields.io/github/stars/marcelschaack/coronavirus-risk-predictor?style=flat-square)](https://github.com/marcelschaack/coronavirus-risk-predictor/stargazers)
+[![GitHub license](https://img.shields.io/github/license/marcelschaack/coronavirus-risk-predictor?style=flat-square)](https://github.com/marcelschaack/coronavirus-risk-predictor/blob/master/LICENSE)
+[![HitCount](http://hits.dwyl.com/marcelschaack/coronavirus-risk-predictor.svg)](http://hits.dwyl.com/marcelschaack/coronavirus-predictor)
 
 Welcome to the Corona Predict Github.
 This tool helps you understand the risks of Coronavirus transmission of independent particular activities.
@@ -68,10 +68,7 @@ pip install -r requirements
 - WordEmbedding model to create word embeddings of all activities
 - final classification of activity + location (+date) into high-risk or low-risk
 ```
-# Example
-
-# Step 1
-# Step 2
+python 
 ```
 
 ## Build Model
@@ -92,10 +89,10 @@ streamlit run corona_predict.py
 ```
 
 ## Analysis
-- Further results about the model, PCA and significance will be included shortly
-```
-# Example
+|Features used             |Model          |Recall   |
+|--------------------------|---------------|---------|
+|Word2Vec                  |Random Forest  |75%      |
+|Word2Vec + location-based |Random Forest  |84%      |
 
-# Step 1
-# Step 2
-```
+
+- Further results about PCA and significance will be included shortly
