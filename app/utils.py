@@ -150,7 +150,8 @@ class APICaller:
         county = self.county + ' County, ' + self.state + ', United States'
         case_file = 'data/raw/timeseries-byLocation.json'
 
-        if datetime.fromtimestamp(os.path.getmtime(case_file)) < self.date - timedelta(days=1):
+        if not os.path.isfile(case_file) or\
+                datetime.fromtimestamp(os.path.getmtime(case_file)) < self.date - timedelta(days=1):
             url = 'https://coronadatascraper.com/timeseries-byLocation.json'
             urllib.request.urlretrieve(url, case_file)
 
