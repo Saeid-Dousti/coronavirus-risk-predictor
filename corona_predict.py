@@ -10,17 +10,6 @@ from app.inference_functions import feature_extraction, classification
 classifier_file = 'app/classifiers/classifier_random_for.sav'
 word2vec_file = 'app/word2vec/newsdata_model2'
 
-# extract word2vec dependency files if this has not occurred previously
-if not os.path.isfile(word2vec_file + '.wv.vectors.npy'):
-    with ZipFile('app/word2vec/word2vec_file1.zip', 'r') as zipObj:
-        # Extract all the contents of zip file in word2vec directory
-        zipObj.extractall('app/word2vec')
-
-if not os.path.isfile(word2vec_file + '.trainables.syn1neg.npy'):
-    with ZipFile('app/word2vec/word2vec_file2.zip', 'r') as zipObj:
-        # Extract all the contents of zip file in word2vec directory
-        zipObj.extractall('app/word2vec')
-
 
 # create US counties dataframe to allow people to choose counties
 df = pd.read_csv('data/united-states-counties.csv')

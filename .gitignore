@@ -83,8 +83,8 @@ data/raw/news_data
 data/raw/cord_19
 
 # models
-app/word2vec_model/word2vec_file1.zip
-app/word2vec_model/word2vec_file1.zip
+app/word2vec/word2vec_file1.zip
+app/word2vec_model
 
 
 # checkpoints

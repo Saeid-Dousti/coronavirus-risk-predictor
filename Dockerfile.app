@@ -18,7 +18,7 @@ COPY .streamlit /tmp/.streamlit
 RUN conda install python=3.8.3
 
 ENV PORT 8080
-ENV GOOGLE_APPLICATION_CREDENTIALS=/tmp/build/storage-read-only-service-account.json
+# ENV GOOGLE_APPLICATION_CREDENTIALS=/tmp/build/storage-read-only-service-account.json
 
 # change directory
 WORKDIR /tmp
