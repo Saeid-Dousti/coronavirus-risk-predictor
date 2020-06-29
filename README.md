@@ -33,7 +33,7 @@ cd ./coronavirus-risk-predictor
 #### Installation
 To install the packages above, please run:
 ```shell script
-pip install -r requirements
+pip install -r requirements.txt
 ```
 
 Alternatively, if you would like to use docker you can also use:
